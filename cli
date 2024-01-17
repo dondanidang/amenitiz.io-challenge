@@ -30,7 +30,7 @@ module Cli
 
     desc "list", "List all products"
     def list
-      puts Product
+      ProductsHandler.list
     end
   end
 
@@ -53,7 +53,7 @@ module Cli
     desc "product SUBCOMMAND ...ARGS", "provides commands related to products"
     subcommand "product", Product
 
-    desc "product SUBCOMMAND ...ARGS", "provides commands related to discounts"
+    desc "discount SUBCOMMAND ...ARGS", "provides commands related to discounts"
     subcommand "discount", Discount
 
     desc "start", "Start the application"
