@@ -5,8 +5,6 @@ class Product < ActiveRecord::Base
   validates :name, presence: true
   validates :price_cents, presence: true
 
-  scope :enabled, -> { where(enabled: true) }
-
   def price
     Money.new(price_cents, price_currency)
   end
