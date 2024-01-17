@@ -5,10 +5,25 @@ class Application
     app = Application.new
 
     app.sync_db_structure
+    SeedDataLoader.load
+  end
+
+  def self.stop
+    app = Application.new
+
+    app.drop_db_structure
+  end
+
+  def self.reset
+    app = Application.new
+
+    app.drop_db_structure
+    app.sync_db_structure
+    SeedDataLoader.load
   end
 
   def sync_db_structure
-    ActiveRecord::Migration.verbose = false
+    # ActiveRecord::Migration.verbose = false
 
     CreateMigrations.migrate(:up) unless ActiveRecord::Base.connection.table_exists?(:migrations);
     Dir["#{File.dirname(__FILE__)}/../db/migrations/**/*.rb"].each do |file_path|
@@ -26,6 +41,12 @@ class Application
 
       klass.migrate(:up)
       Migration.create!(name: migration_name)
+    end
+  end
+
+  def drop_db_structure
+    ActiveRecord::Base.connection.tables.each do |table|
+      ActiveRecord::Base.connection.drop_table(table)
     end
   end
 end

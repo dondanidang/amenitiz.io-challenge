@@ -3,6 +3,7 @@
 source "https://rubygems.org"
 
 gem 'activerecord'
+gem  'activerecord-import'
 gem 'money'
 gem 'sqlite3'
 gem 'thor'
