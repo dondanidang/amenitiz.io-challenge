@@ -1,0 +1,80 @@
+require_relative 'config/application'
+
+module Cli
+  class Basket < Thor
+    class_option :verbose, :type => :boolean, :aliases => "-v"
+
+    desc "scan <product_code>", "Scan product and Add it to the basket"
+    def scan(product_code)
+      BasketHandler.scan(product_code)
+    end
+
+    desc "compute_total", "Compute total price of the basket"
+    def compute_total
+      BasketHandler.compute_total
+    end
+
+    desc "clear", "Clear the basket"
+    def clear
+      BasketHandler.clear
+    end
+
+    desc "show", "Show the basket"
+    def show
+      BasketHandler.show
+    end
+  end
+
+  class Product < Thor
+    class_option :verbose, :type => :boolean, :aliases => "-v"
+
+    desc "list", "List all products"
+    def list
+      puts Product
+    end
+  end
+
+
+  class Discount < Thor
+    class_option :verbose, :type => :boolean, :aliases => "-v"
+
+    desc "list", "List all discounts"
+    def list
+      # ...
+    end
+  end
+
+  class Main < Thor
+    class_option :verbose, :type => :boolean, :aliases => "-v"
+
+    desc "basket SUBCOMMAND ...ARGS", "provides commands related to basket"
+    subcommand "basket", Basket
+
+    desc "product SUBCOMMAND ...ARGS", "provides commands related to products"
+    subcommand "product", Product
+
+    desc "product SUBCOMMAND ...ARGS", "provides commands related to discounts"
+    subcommand "discount", Discount
+
+    desc "start", "Start the application"
+    def start
+      Application.start
+
+      puts '''
+        *************************************************
+          * Welcome to the CASH REGISTRER application *
+        *************************************************
+        How to use it:
+          1. Scan products: with the command `cli basket scan <product_code>` add products to the basket
+          2. Compute total: with the command `cli basket compute_total` compute the total price of the basket
+
+        If you need view the current basket, type: `cli basket show`
+        And to clear the basket, type: `cli basket clear`
+
+        To see the list of available commands, type: `cli help`
+      '''
+    end
+  end
+end
+
+Cli::Main.start(ARGV)
