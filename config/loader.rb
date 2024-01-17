@@ -1,5 +1,6 @@
 require 'active_record'
 require 'activerecord-import'
+require 'byebug'
 require 'money'
 require 'money-rails'
 require 'sqlite3'

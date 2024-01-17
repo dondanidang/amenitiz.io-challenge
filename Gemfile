@@ -7,3 +7,5 @@ gem  'activerecord-import'
 gem 'money'
 gem 'sqlite3'
 gem 'thor'
+
+gem "byebug", "~> 11.1", :groups => [:development, :test]
