@@ -24,6 +24,11 @@ module Cli
       BasketHandler.cancel
     end
 
+    desc "complete", "Complete the current initiated basket. This means that the basket has been paid"
+    def complete
+      BasketHandler.complete
+    end
+
     desc "show", "Show the current initiated basket"
     def show
       BasketHandler.show
@@ -38,7 +43,6 @@ module Cli
       ProductsHandler.list
     end
   end
-
 
   class Discount < Thor
     class_option :verbose, :type => :boolean, :aliases => "-v"

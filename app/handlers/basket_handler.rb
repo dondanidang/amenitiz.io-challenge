@@ -4,6 +4,7 @@ class BasketHandler
       product = Product.find_by!(code: product_code)
       basket_product = Baskets::AddProductService.call(product)
 
+      puts "product #{product_code} successfully added to basket"
       puts Baskets::AddPresenter.build_view(basket_product.basket)
     rescue ActiveRecord::RecordNotFound
       puts "Product with code #{product_code} does not exist"
@@ -15,9 +16,20 @@ class BasketHandler
 
     def cancel
       basket = Basket.find_by!(status: Basket::STATUSES[:initiated])
-      basket.update!(status: Basket::STATUSES[:cancelled])
+      basket.update!(status: Basket::STATUSES[:canceled])
 
-      puts Baskets::CancelPresenter.build_view(basket)
+      puts "Basket has been successfully canceled"
+    rescue ActiveRecord::RecordNotFound
+      puts "Your basket is currently empty!"
+    end
+
+    def complete
+      basket = Basket.find_by!(status: Basket::STATUSES[:initiated])
+      basket.update!(status: Basket::STATUSES[:completed])
+
+      puts "Basket has been successfully completed"
+    rescue ActiveRecord::RecordNotFound
+      puts "Your basket is currently empty!"
     end
 
     def show
@@ -32,12 +44,12 @@ class BasketHandler
       product = Product.find_by!(code: product_code)
       basket_product = Baskets::RemoveProductService.call(product)
 
-      puts Baskets::AddPresenter.build_view(basket_product.basket)
+      puts Baskets::RemovePresenter.build_view(basket_product.basket)
     rescue ActiveRecord::RecordNotFound
       puts "Product with code #{product_code} does not exist"
     rescue Baskets::Errors::ProductNotFound
       puts "Product with code #{product_code} is not in the basket"
-    rescue Baskets::Errors::NoBasketInitiated
+    rescue Baskets::Errors::NoInitiatedBasketFound
       puts "Your basket is currenly empty!"
     rescue
     end

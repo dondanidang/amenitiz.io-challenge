@@ -6,7 +6,7 @@ class Basket < ActiveRecord::Base
   STATUSES = {
     initiated: 'initiated',
     completed: 'completed',
-    cancelled: 'cancelled'
+    canceled: 'canceled'
   }.freeze
 
   validates :status, presence: true, inclusion: { in: STATUSES.values }
