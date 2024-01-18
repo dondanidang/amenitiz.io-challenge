@@ -30,7 +30,17 @@ module Baskets
     end
 
     def total_with_discount
-      Money.new(@basket.products.sum(:price_cents))
+      products.sum do |product|
+        product_price = product.price
+
+        discounts = discounts_by_product_id[product.id]
+
+        unless discounts.blank?
+          product_price = discounts.map { _1.apply(product_price) }
+        end
+
+        product_price
+      end
     end
 
     def discounts
