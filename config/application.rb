@@ -8,12 +8,6 @@ class Application
     SeedDataLoader.load
   end
 
-  def self.stop
-    app = Application.new
-
-    app.drop_db_structure
-  end
-
   def self.reset
     app = Application.new
 
@@ -45,8 +39,16 @@ class Application
   end
 
   def drop_db_structure
-    ActiveRecord::Base.connection.tables.each do |table|
-      ActiveRecord::Base.connection.drop_table(table)
+    tables = ActiveRecord::Base.connection.tables
+
+    loop do
+      break if tables.empty?
+
+      tables.each do |table|
+        ActiveRecord::Base.connection.drop_table(table) rescue nil
+      end
+
+      tables = ActiveRecord::Base.connection.tables
     end
   end
 end

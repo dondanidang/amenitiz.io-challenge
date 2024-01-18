@@ -5,6 +5,7 @@ class Product < ActiveRecord::Base
   validates :name, presence: true
   validates :price_cents, presence: true
 
+  has_many :basket_products, inverse_of: :product
   def price
     Money.new(price_cents, price_currency)
   end

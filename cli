@@ -4,9 +4,14 @@ module Cli
   class Basket < Thor
     class_option :verbose, :type => :boolean, :aliases => "-v"
 
-    desc "scan <product_code>", "Scan product and Add it to the basket"
-    def scan(product_code)
-      BasketHandler.scan(product_code)
+    desc "add <product_code>", "Add product to the current initiated basket. Initialize a new basket if there is no current initiated"
+    def add(product_code)
+      BasketHandler.add(product_code)
+    end
+
+    desc "remove <product_code>", "Remove product from the current initiated basket"
+    def remove(product_code)
+      BasketHandler.remove(product_code)
     end
 
     desc "compute_total", "Compute total price of the basket"
@@ -14,12 +19,17 @@ module Cli
       BasketHandler.compute_total
     end
 
-    desc "clear", "Clear the basket"
-    def clear
-      BasketHandler.clear
+    desc "cancel", "Cancel the current initiated basket"
+    def cancel
+      BasketHandler.cancel
     end
 
-    desc "show", "Show the basket"
+    desc "complete", "Complete the current initiated basket. This means that the basket has been paid"
+    def complete
+      BasketHandler.complete
+    end
+
+    desc "show", "Show the current initiated basket"
     def show
       BasketHandler.show
     end
@@ -33,7 +43,6 @@ module Cli
       ProductsHandler.list
     end
   end
-
 
   class Discount < Thor
     class_option :verbose, :type => :boolean, :aliases => "-v"
