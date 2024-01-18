@@ -11,7 +11,13 @@ class BasketHandler
     end
 
     def compute_total
-      puts "Computing total"
+      basket = Basket.includes(:products).find_by!(status: Basket::STATUSES[:initiated])
+
+      Baskets::ComputeTotalService.call(basket)
+
+      puts Baskets::ComputeTotalPresenter.build_view(basket)
+    rescue ActiveRecord::RecordNotFound
+      puts CliErrors::BasketIsEmptyError.new.message
     end
 
     def cancel
@@ -47,6 +53,7 @@ class BasketHandler
       basket_product = Baskets::RemoveProductService.call(product)
 
       puts "product #{product_code} successfully removed from the basket"
+      puts Baskets::RemovePresenter.build_view(basket_product.basket)
     rescue ActiveRecord::RecordNotFound
       puts CliErrors::ProductNotFoundError.new(product_code).message
     rescue Baskets::Errors::BasketIsEmpty

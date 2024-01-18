@@ -2,15 +2,8 @@
 
 module Baskets
   class PartialPresenter < ApplicationPresenter
-    private
-
-    def initialize(basket)
-      @basket = basket
-
-      super()
-    end
-
-    def build_view
+    protected
+    def build_view_raw
       products_hash = @basket.products.map do |product|
         {
           code: product.code,
@@ -22,7 +15,19 @@ module Baskets
       {
         id: @basket.id,
         products: products_hash
-      }.to_yaml
+      }
+    end
+
+    private
+
+    def initialize(basket)
+      @basket = basket
+
+      super()
+    end
+
+    def build_view
+      build_view_raw.to_yaml
     end
   end
 end

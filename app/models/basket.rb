@@ -26,7 +26,7 @@ class Basket < ActiveRecord::Base
 
   def total=(value)
     self.total_cents = value.cents
-    self.currency = value.currency.iso_code
+    self.total_currency = value.currency.iso_code
   end
 
   def total_paid
