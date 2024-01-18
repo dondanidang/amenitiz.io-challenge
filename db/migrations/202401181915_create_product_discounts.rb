@@ -1,4 +1,4 @@
-class CreateQuantityBasedDiscounts < ActiveRecord::Migration[7.1]
+class CreateProductDiscounts < ActiveRecord::Migration[7.1]
   def change
     create_table :product_discounts do |t|
       t.references :product, null: false, foreign_key: true
