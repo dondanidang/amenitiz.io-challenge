@@ -7,7 +7,7 @@ class BasketHandler
       puts "product #{product_code} successfully added to basket"
       puts Baskets::AddPresenter.build_view(basket_product.basket)
     rescue ActiveRecord::RecordNotFound
-      puts CliErrors::ProductNotInBasketError.new(product_code).message
+      puts CliErrors::ProductNotFoundError.new(product_code).message
     end
 
     def compute_total
@@ -49,6 +49,8 @@ class BasketHandler
       puts "product #{product_code} successfully removed from the basket"
     rescue ActiveRecord::RecordNotFound
       puts CliErrors::ProductNotFoundError.new(product_code).message
+    rescue Baskets::Errors::BasketIsEmpty
+      puts CliErrors::BasketIsEmptyError.new.message
     rescue Baskets::Errors::ProductNotInBasket
       puts CliErrors::ProductNotInBasketError.new(product_code).message
     rescue Baskets::Errors::NoInitiatedBasketFound

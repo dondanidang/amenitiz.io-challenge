@@ -3,4 +3,5 @@ module Baskets::Errors
 
   class NoInitiatedBasketFound < Base; end
   class ProductNotInBasket < Base; end
+  class BasketIsEmpty < Base; end
 end

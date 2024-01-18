@@ -24,9 +24,15 @@ module Baskets
     end
 
     def basket_product
-      @basket_product ||= BasketProduct.not_removed.find_by!(basket: basket, product: @product)
-    rescue ActiveRecord::RecordNotFound
-      raise Errors::ProductNotInBasket
+      @basket_product ||= begin
+        basket_products = BasketProduct.not_removed.where(basket: basket)
+
+        raise Errors::BasketIsEmpty if basket_products.empty?
+
+        basket_products.find_by!(product: @product)
+      rescue ActiveRecord::RecordNotFound
+        raise Errors::ProductNotInBasket
+      end
     end
 
     def basket
