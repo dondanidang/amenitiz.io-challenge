@@ -32,5 +32,21 @@ module Baskets
     def total_with_discount
       Money.new(@basket.products.sum(:price_cents))
     end
+
+    def discounts
+      @discounts ||= @basket.discounts
+    end
+
+    def discounts_by_product_id
+      @discounts_by_product_id ||= discounts.group_by(&:product_id)
+    end
+
+    def products
+      @products ||= @basket.products
+    end
+
+    def product_codes
+      @product_codes ||= products.pluck(:code)
+    end
   end
 end
