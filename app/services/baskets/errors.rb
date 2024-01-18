@@ -1,8 +1,6 @@
-module Errors
+module Baskets::Errors
   class Base < StandardError; end
 
-  class BasketNotFound < Base; end
-  class ProductNotFound < Base; end
-  class ProductAlreadyInBasket < Base; end
+  class NoInitiatedBasketFound < Base; end
   class ProductNotInBasket < Base; end
 end

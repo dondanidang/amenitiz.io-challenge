@@ -11,7 +11,7 @@ class Basket < ActiveRecord::Base
 
   validates :status, presence: true, inclusion: { in: STATUSES.values }
 
-  has_many :basket_products, inverse_of: :basket
+  has_many :basket_products, -> { not_removed }, inverse_of: :basket
   has_many :products, through: :basket_products
 
   private def set_defaults

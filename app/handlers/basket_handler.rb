@@ -7,7 +7,7 @@ class BasketHandler
       puts "product #{product_code} successfully added to basket"
       puts Baskets::AddPresenter.build_view(basket_product.basket)
     rescue ActiveRecord::RecordNotFound
-      puts "Product with code #{product_code} does not exist"
+      puts CliErrors::ProductNotInBasketError.new(product_code).message
     end
 
     def compute_total
@@ -20,7 +20,7 @@ class BasketHandler
 
       puts "Basket has been successfully canceled"
     rescue ActiveRecord::RecordNotFound
-      puts "Your basket is currently empty!"
+      puts CliErrors::BasketIsEmptyError.new.message
     end
 
     def complete
@@ -29,28 +29,30 @@ class BasketHandler
 
       puts "Basket has been successfully completed"
     rescue ActiveRecord::RecordNotFound
-      puts "Your basket is currently empty!"
+      puts CliErrors::BasketIsEmptyError.new.message
     end
 
     def show
-      basket = Basket.find_by!(status: Basket::STATUSES[:initiated])
+      basket = Basket.includes(:products).find_by!(status: Basket::STATUSES[:initiated])
+
+      return puts CliErrors::BasketIsEmptyError.new.message if basket.products.empty?
 
       puts Baskets::ShowPresenter.build_view(basket)
     rescue ActiveRecord::RecordNotFound
-      puts "Your basket is currently empty!"
+      puts CliErrors::BasketIsEmptyError.new.message
     end
 
     def remove(product_code)
       product = Product.find_by!(code: product_code)
       basket_product = Baskets::RemoveProductService.call(product)
 
-      puts Baskets::RemovePresenter.build_view(basket_product.basket)
+      puts "product #{product_code} successfully removed from the basket"
     rescue ActiveRecord::RecordNotFound
-      puts "Product with code #{product_code} does not exist"
-    rescue Baskets::Errors::ProductNotFound
-      puts "Product with code #{product_code} is not in the basket"
+      puts CliErrors::ProductNotFoundError.new(product_code).message
+    rescue Baskets::Errors::ProductNotInBasket
+      puts CliErrors::ProductNotInBasketError.new(product_code).message
     rescue Baskets::Errors::NoInitiatedBasketFound
-      puts "Your basket is currenly empty!"
+      puts CliErrors::BasketIsEmptyError.new.message
     rescue
     end
   end

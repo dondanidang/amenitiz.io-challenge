@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Baskets
-  class ShowPresenter < BasePresenter; end
+  class ShowPresenter < PartialPresenter; end
 end

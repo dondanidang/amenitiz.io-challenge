@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Baskets
-  class BasePresenter < ApplicationPresenter
+  class PartialPresenter < ApplicationPresenter
     private
 
     def initialize(basket)
