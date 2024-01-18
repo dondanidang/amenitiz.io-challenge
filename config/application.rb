@@ -17,7 +17,7 @@ class Application
   end
 
   def sync_db_structure
-    # ActiveRecord::Migration.verbose = false
+    ActiveRecord::Migration.verbose = false
 
     CreateMigrations.migrate(:up) unless ActiveRecord::Base.connection.table_exists?(:migrations);
     Dir["#{File.dirname(__FILE__)}/../db/migrations/**/*.rb"].each do |file_path|
