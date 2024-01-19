@@ -12,7 +12,6 @@ describe Baskets::ComputeTotalService do
 
     context 'when basket is empty' do
       it 'returns zero' do
-        byebug
         expect(compute_total_of_the_basket).to eq(Money.zero('EUR'))
       end
     end
