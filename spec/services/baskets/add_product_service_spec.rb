@@ -11,13 +11,18 @@ describe Baskets::AddProductService do
     let(:product) { create(:product) }
 
     it 'adds product to basket' do
-      expect { add_producto_basket }.to change { Basket.count }.by(1)
+      expect { add_producto_basket }
+        .to change { Basket.count }.by(1)
+        .and change { BasketProduct.count }.by(1)
     end
 
     context 'when initiated basket already exist' do
-      let!(:basket) { create(:basket) }
+      before { create(:basket, status: Basket::STATUSES[:initiated]) }
+
       it 'adds product to basket' do
-        expect { add_producto_basket }.to change { Basket.count }.by(1)
+        expect { add_producto_basket }
+          .to change { BasketProduct.count }.by(1)
+          .and not_change { Basket.count }
       end
     end
   end
