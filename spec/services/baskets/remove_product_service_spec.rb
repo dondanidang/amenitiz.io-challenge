@@ -4,15 +4,15 @@ require 'spec_helper'
 
 describe Baskets::RemoveProductService do
   describe '.call' do
-    subject(:remmove_product_from_basket) do
+    subject(:remove_product_from_basket) do
       described_class.call(product)
     end
 
     let(:product) { create(:product) }
 
     context 'when initiated basket does not exist' do
-      it 'raiss Baskets::Errors::NoInitiatedBasketFound' do
-        expect { remmove_product_from_basket }.to raise_error(Baskets::Errors::NoInitiatedBasketFound)
+      it 'raises Baskets::Errors::NoInitiatedBasketFound' do
+        expect { remove_product_from_basket }.to raise_error(Baskets::Errors::NoInitiatedBasketFound)
       end
     end
 
@@ -21,8 +21,8 @@ describe Baskets::RemoveProductService do
         create(:basket, status: Basket::STATUSES[:initiated])
       end
 
-      it 'raiss Baskets::Errors::BasketIsEmpty' do
-        expect { remmove_product_from_basket }.to raise_error(Baskets::Errors::BasketIsEmpty)
+      it 'raises Baskets::Errors::BasketIsEmpty' do
+        expect { remove_product_from_basket }.to raise_error(Baskets::Errors::BasketIsEmpty)
       end
     end
 
@@ -32,8 +32,8 @@ describe Baskets::RemoveProductService do
         create(:basket_product, basket: basket)
       end
 
-      it 'raiss Baskets::Errors::ProductNotInBasket' do
-        expect { remmove_product_from_basket }.to raise_error(Baskets::Errors::ProductNotInBasket)
+      it 'raises Baskets::Errors::ProductNotInBasket' do
+        expect { remove_product_from_basket }.to raise_error(Baskets::Errors::ProductNotInBasket)
       end
     end
 
@@ -44,7 +44,7 @@ describe Baskets::RemoveProductService do
       end
 
       it 'removes product from basket' do
-        expect(remmove_product_from_basket).to have_attributes(
+        expect(remove_product_from_basket).to have_attributes(
           product_id: product.id,
           removed_at: be_present
         )
