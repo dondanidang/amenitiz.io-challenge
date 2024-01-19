@@ -11,18 +11,33 @@ describe Baskets::AddProductService do
     let(:product) { create(:product) }
 
     it 'adds product to basket' do
-      expect { add_producto_basket }
-        .to change { Basket.count }.by(1)
-        .and change { BasketProduct.count }.by(1)
+      aggregate_failures do
+        expect { add_producto_basket }
+          .to change { Basket.count }.by(1)
+          .and change { BasketProduct.count }.by(1)
+
+        expect(BasketProduct.last).to have_attributes(
+          product_id: product.id,
+          removed_at: nil
+        )
+      end
     end
 
     context 'when initiated basket already exist' do
-      before { create(:basket, status: Basket::STATUSES[:initiated]) }
+      let!(:basket) { create(:basket, status: Basket::STATUSES[:initiated]) }
 
       it 'adds product to basket' do
-        expect { add_producto_basket }
-          .to change { BasketProduct.count }.by(1)
-          .and not_change { Basket.count }
+        aggregate_failures do
+          expect { add_producto_basket }
+            .to change { BasketProduct.count }.by(1)
+            .and not_change { Basket.count }
+
+          expect(BasketProduct.last).to have_attributes(
+            product_id: product.id,
+            basket_id: basket.id,
+            removed_at: nil
+          )
+        end
       end
     end
   end
