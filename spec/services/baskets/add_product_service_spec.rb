@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Baskets::AddProductService do
   describe '.call' do
-    subject(:add_producto_basket) do
+    subject(:add_product_to_basket) do
       described_class.call(product)
     end
 
@@ -12,7 +12,7 @@ describe Baskets::AddProductService do
 
     it 'adds product to basket' do
       aggregate_failures do
-        expect { add_producto_basket }
+        expect { add_product_to_basket }
           .to change { Basket.count }.by(1)
           .and change { BasketProduct.count }.by(1)
 
@@ -28,7 +28,7 @@ describe Baskets::AddProductService do
 
       it 'adds product to basket' do
         aggregate_failures do
-          expect { add_producto_basket }
+          expect { add_product_to_basket }
             .to change { BasketProduct.count }.by(1)
             .and not_change { Basket.count }
 
