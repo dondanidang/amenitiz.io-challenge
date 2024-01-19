@@ -19,18 +19,22 @@ module Baskets
     # Returns Basket.
     def call
       @basket.total = total
-      @basket.total_paid = total_with_discount
+      @basket.total_paid = total - total_discount
       @basket.save!
 
       @basket
     end
 
-    def total
-      Money.new(@basket.products.sum(:price_cents))
+    def total_discount
+      @total_discount ||= ComputeDiscountService.call(@basket)
     end
 
-    def total_with_discount
-      Money.new(@basket.products.sum(:price_cents))
+    def total
+      @total ||= Money.new(@basket.products.sum(:price_cents))
+    end
+
+    def products
+      @products ||= @basket.products
     end
   end
 end
