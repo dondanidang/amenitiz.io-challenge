@@ -40,15 +40,17 @@ module Baskets
     end
 
     def handle_modulus(discount_rule, affected_products)
-      total_product_with_discount = (afffected_products.size / discount_rule.quantity) * discount_rule.quantity
+      return Money.zero if affected_products.size < discount_rule.quantity
+
+      total_product_with_discount = (affected_products.size / discount_rule.quantity) * discount_rule.quantity
 
       discount_per_product = case discount_rule.discount_unit
       when 'percentage'
-        (discount_rule.discount_value / 100.0) * affected_products.first.price
+        (discount_rule.discount_value.to_i / 100.0) * affected_products.first.price
       when 'cents'
-        Money.new(discount_rule.discount_value)
+        Money.new(discount_rule.discount_value.to_i)
       when 'divisor'
-        numerator, denominator = discount_rule.discount_value.split('/').map(&:to_i)
+        numerator, denominator = discount_rule.discount_value.split('/').map(&:to_f)
 
         affected_products.first.price * (numerator / denominator)
       else
@@ -65,13 +67,13 @@ module Baskets
 
       discount_per_product = case discount_rule.discount_unit
       when 'percentage'
-        (discount_rule.discount_value / 100.0) * affected_products.first.price
+        (discount_rule.discount_value.to_i / 100.0) * affected_products.first.price
       when 'cents'
-        Money.new(discount_rule.discount_value)
+        Money.new(discount_rule.discount_value.to_i)
       when 'divisor'
-        numerator, denominator = discount_rule.discount_value.split('/').map(&:to_i)
+        numerator, denominator = discount_rule.discount_value.split('/').map(&:to_f)
 
-        affected_products.first.price * (numerator / denominator)
+        affected_products.first.price * (numerator / denominator) * 1.0
       else
         raise NotDiscountRuleOperatorImplementedError
       end
@@ -81,7 +83,7 @@ module Baskets
 
     def discounts
       @discounts ||= Discount
-        .includes(:rulable, :product_discounts)
+        .includes(:product_discounts)
         .where(product_discounts: { product_id: product_ids, disabled_at: nil })
     end
 

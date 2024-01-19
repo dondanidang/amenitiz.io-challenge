@@ -74,13 +74,17 @@ module Cli
           * Welcome to the CASH REGISTRER application *
         *************************************************
         How to use it:
-          1. Scan products: with the command `cli basket scan <product_code>` add products to the basket
-          2. Compute total: with the command `cli basket compute_total` compute the total price of the basket
+          1. Scan and add products: with the command `ruby cli basket scan <product_code>` add products to the basket
+          2. Compute total: with the command `ruby cli basket compute_total` compute the total price of the basket
 
-        If you need view the current basket, type: `cli basket show`
-        And to clear the basket, type: `cli basket clear`
+        What else can you do?
+          1. view the current basket, type: `ruby cli basket show`
+          2. cancel the current basket, type: `ruby cli basket cancel`
+          3. complete the current basket, type: `ruby cli basket complete`
+          4. view the list of products, type: `ruby cli product list`
+          5. view the list of discounts, type: `ruby cli discount list`
 
-        To see the list of available commands, type: `cli help`
+        And to view the list of available commands, type: `ruby cli help`
       '''
     end
   end
