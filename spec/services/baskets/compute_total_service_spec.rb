@@ -8,11 +8,11 @@ describe Baskets::ComputeTotalService do
       described_class.call(basket)
     end
 
-    let(:basket) { create(:basket, status: basket::STATUSES[:initiated]) }
+    let(:basket) { create(:basket, status: Basket::STATUSES[:initiated]) }
 
     context 'when basket is empty' do
       it 'returns zero' do
-        expect(compute_total_of_the_basket).to eq(Money.zero('EUR'))
+        expect(compute_total_of_the_basket.total).to eq(Money.zero('EUR'))
       end
     end
 
@@ -23,7 +23,7 @@ describe Baskets::ComputeTotalService do
       end
 
       it 'returns 3.11€' do
-        expect(compute_total_of_the_basket).to eq(Money.from_amount(3.11, 'EUR'))
+        expect(compute_total_of_the_basket.total).to eq(Money.from_amount(3.11, 'EUR'))
       end
     end
   end
